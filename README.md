@@ -1,2 +1,1 @@
-# credit-app-system
-Bootcamp DIO
+# credit-application-system
