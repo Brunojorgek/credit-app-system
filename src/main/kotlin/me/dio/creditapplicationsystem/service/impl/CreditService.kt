@@ -19,7 +19,7 @@ class CreditService(
         return this.creditRepostitory.save(credit)
     }
 
-    override fun findAllByCudtomer(customerId: Long): List<Credit> {
+    override fun findAllByCustomer(customerId: Long): List<Credit> {
         return this.creditRepostitory.findAllByCustomerId(customerId)
     }
 
