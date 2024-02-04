@@ -1,12 +1,9 @@
 package service
 
-import io.mockk.coEvery
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.verify
-import me.dio.creditapplicationsystem.entity.Address
 import me.dio.creditapplicationsystem.entity.Customer
 import me.dio.creditapplicationsystem.exception.BusinessException
 import me.dio.creditapplicationsystem.repository.CustomerRepository
@@ -62,6 +59,22 @@ class CustomerServiceTest {
         Assertions.assertThatExceptionOfType(BusinessException::class.java)
             .isThrownBy { customerService.findById(fakeId) }
             .withMessage("Id $fakeId not found")
+        verify(exactly = 1) { customerRepository.findById(fakeId) }
+    }
+
+    @Test
+    fun `should delete customer by id`() {
+        //given
+        val fakeId: Long = Random().nextLong()
+        val fakeCustomer: Customer = buildCustomer(id = fakeId)
+        every { customerRepository.findById(fakeId) } returns Optional.of(fakeCustomer)
+        every { customerRepository.delete(fakeCustomer) } just runs
+
+        //when
+        customerService.delete(fakeId)
+        //then
+        verify(exactly = 1) { customerRepository.findById(fakeId) }
+        verify(exactly = 1) { customerRepository.delete(fakeCustomer) }
     }
 
     private fun buildCustomer(
@@ -80,11 +93,7 @@ class CustomerServiceTest {
         cpf = cpf,
         email = email,
         password = password,
-        address = Address(
-            zipCode = zipCode,
-            street = street
-        ),
-        income = income,
-        id = id
+        id = id,
+        income = income
     )
 }
