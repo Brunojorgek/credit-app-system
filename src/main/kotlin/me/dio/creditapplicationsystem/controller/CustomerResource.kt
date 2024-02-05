@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/customer")
-class CustomerController(private val customerService: CustomerService) {
+class CustomerResource(private val customerService: CustomerService) {
 
 
     @PostMapping
